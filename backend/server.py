@@ -2,6 +2,7 @@ from flask import Flask, request, render_template
 import data_utils
 import model_nn
 import sqlite3
+import argparse
 import database as db
 
 app = Flask(__name__)
@@ -26,5 +27,9 @@ def regression():
     return str(req_struct["lat"])
 
 if __name__ == '__main__':
-    # db.init_db()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--initialize', action='store_true') # flag for updating schema
+    args = parser.parse_args()
+    if args.initialize: 
+        db.init_db()
     app.run(debug=True)

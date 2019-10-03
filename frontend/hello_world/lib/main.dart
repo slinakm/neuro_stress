@@ -128,7 +128,7 @@ class _MyHomePageState extends State<MyHomePage> {
            //send request
       String url = 'http://localhost:5000/api/score/';
       Map<String, String> headers = {"Content-type": "application/json"};
-      Map map = {"lat": currentLocation.latitude, "lng": currentLocation.longitude, "time":currentLocation.time};
+      Map map = {"lat": currentLocation.latitude, "lng": currentLocation.longitude, "time":currentLocation.time, "spd":currentLocation.speed};
       Response response = await post(url, headers: headers, body: json.encode(map));
       print(response.body);
       

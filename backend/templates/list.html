@@ -7,6 +7,8 @@
             <td>Time</td>
             <td>Lat.</td>
             <td>Long.</td>
+            <td>Speed</td>
+            <td>Sentiment</td>
          </thead>
          
          {% for row in rows %}
@@ -15,10 +17,10 @@
                <td>{{row["time_recorded"]}}</td>
                <td> {{ row["loc_y"]}}</td>
                <td>{{row['loc_x']}}</td>	
+               <td>{{row['speed']}}</td>	
+               <td>{{row['feeling']}}</td>
             </tr>
          {% endfor %}
       </table>
-      
-      <a href = "/">Go back to home page</a>
    </body>
 </html>
