@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:location/location.dart';
 import 'package:http/http.dart';
+import "dart:convert";
 
 void main() => runApp(MyApp());
 
@@ -10,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Neuros',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Home Page'),
     );
   }
 }
@@ -47,18 +48,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+  double _lat = 0.0;
+  double _lng = 0.0;
+  double _spd = 0.0;
+  double _time = 0.0;
 
   @override
   Widget build(BuildContext context) {
@@ -94,34 +87,50 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
+            Column(
+              children: [
+                Text(
+                  "It is now $_time"
+                ),
+                Text(
+                  'You are at:',
+                ),
+                Text(
+                  '$_lat, $_lng',
+                  style: Theme.of(context).textTheme.display1,
+                ),
+                Text(
+                  'You are moving at speed $_spd'
+                )
+              ]),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
+        onPressed: _getLocation,
+        tooltip: 'Update Info',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 
-  var location = new Location();
   _getLocation() async {
+    var location = new Location();
     try {
       var currentLocation = await location.getLocation();
-      //send request
-      String url = 'localhost:8000/';
-      Map<String, String> headers = {"Content-type":"application/json"};
-      String json = '{"lat": $currentLocation.lat, "lng": $currentLocation.long}';
-      
-      Response response = await post(url, headers: headers, body: json);
+
+      setState(() {
+        _lat = currentLocation.latitude;
+        _lng = currentLocation.longitude; 
+        _spd = currentLocation.speed;
+        _time = currentLocation.time;
+     });
+           //send request
+      String url = 'http://localhost:5000/api/score/';
+      Map<String, String> headers = {"Content-type": "application/json"};
+      Map map = {"lat": currentLocation.latitude, "lng": currentLocation.longitude, "time":currentLocation.time};
+      Response response = await post(url, headers: headers, body: json.encode(map));
+      print(response.body);
       
     } on PlatformException catch (e) {
       print(e);
