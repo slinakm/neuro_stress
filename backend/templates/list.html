@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+   <body>
+      <table border = 1>
+         <thead>
+            <td>Id</td>
+            <td>Time</td>
+            <td>Lat.</td>
+            <td>Long.</td>
+         </thead>
+         
+         {% for row in rows %}
+            <tr>
+               <td>{{row["id"]}}</td>
+               <td>{{row["time_recorded"]}}</td>
+               <td> {{ row["loc_y"]}}</td>
+               <td>{{row['loc_x']}}</td>	
+            </tr>
+         {% endfor %}
+      </table>
+      
+      <a href = "/">Go back to home page</a>
+   </body>
+</html>
