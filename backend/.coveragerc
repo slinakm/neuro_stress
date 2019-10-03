@@ -1,0 +1,5 @@
+[run]
+include = neuro_stress/*
+omit = *migrations*, *tests*
+plugins =
+    django_coverage_plugin
