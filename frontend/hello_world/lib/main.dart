@@ -51,7 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
   double _lat = 0.0;
   double _lng = 0.0;
   double _spd = 0.0;
-  double _time = 0.0;
+  int _time = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -114,6 +114,20 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  /**
+   * This method sends an HTTP Request to report a user's self-reported "depression" score to
+   * refine the model to the individual user.
+   *
+   */
+  _reportScore() async {
+    var score = 15; //TODO: CHANGE THIS to get input from a slider, TextView, etc.
+
+    String url = 'http://localhost:5000/api/score/';
+    Map<String, String> headers = {"Content-type": "application/json"};
+    Map map = {"score": score};
+    Response response = await post(url, headers: headers, body: json.encode(map));
+  }
+
   _getLocation() async {
     var location = new Location();
     try {
@@ -123,12 +137,12 @@ class _MyHomePageState extends State<MyHomePage> {
         _lat = currentLocation.latitude;
         _lng = currentLocation.longitude; 
         _spd = currentLocation.speed;
-        _time = currentLocation.time;
+        _time = currentLocation.time.toInt();
      });
            //send request
       String url = 'http://localhost:5000/api/score/';
       Map<String, String> headers = {"Content-type": "application/json"};
-      Map map = {"lat": currentLocation.latitude, "lng": currentLocation.longitude, "time":currentLocation.time, "spd":currentLocation.speed};
+      Map map = {"lat": currentLocation.latitude, "lng": currentLocation.longitude, "time":currentLocation.time.toInt(), "spd":currentLocation.speed};
       Response response = await post(url, headers: headers, body: json.encode(map));
       print(response.body);
       
