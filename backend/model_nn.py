@@ -4,12 +4,19 @@ import data_utils
 import math
 import argparse
 
-def predict(data):
-    return data
+def predict():
+    X, lbl, ctr = compute_optimal_location_clusters(return_labels=True)
+    entropy = _compute_location_entropy(lbl, ctr)
+    variance = _compute_location_variance()
+    circadian = get_circadian_mvmt()
+    use_freq = _get_phone_use_freq()
+    use_duration = _get_phone_use_duration()[0]
+    a = _compute_activation(np.array([entropy, variance, circadian, use_duration, use_freq]))
+    return a
 
 # normalized location entropy, location variance, homestay, circadian mvmt, usage duration, usage freq
 bias = np.array([10, 13, 14, 3, 3])
-weights = np.array([-11, -12 / 20, -0.6, 1 / 1600, 9 / 40])
+weights = np.array([-12, -13 / 20, -0.7, 12 / 16000, 9 / 40])
 # homestay = -10, skipped here, bias = 2
 # baseline-weights -- will be trained online
 
@@ -98,7 +105,7 @@ if __name__ == '__main__':
     psr = argparse.ArgumentParser()
     psr.add_argument('--quiet', '-q', action='store_true')
     args = psr.parse_args()
-    
+
     X, lbl, ctr = compute_optimal_location_clusters(return_labels=True)
     entropy = _compute_location_entropy(lbl, ctr)
     variance = _compute_location_variance()

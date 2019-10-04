@@ -21,8 +21,10 @@ if __name__=='__main__':
     if args.reinitialize:
         try:
             connection = sqlite3.connect("data/database.db")
+            connection = sqlite3.connect("data/scores.db")
             cursor = connection.cursor()
             cursor.execute("DROP TABLE userdata")
+            cursor.execute("DROP TABLE scores")
             connection.close()
         except Exception as e:
             print(e)
@@ -36,7 +38,7 @@ if __name__=='__main__':
     for _ in range(args.n):
         # generate (auto-id, time + increment, lat, lng, spd, feeling)
         rand_time_since += 500 * random.random()
-        dspd = random.gauss(0, 0.1)
+        dspd = random.gauss(0, 0.05)
         newspd = last_spd + dspd
         lat_spd = newspd * random.random()
         lng_spd = math.sqrt(newspd ** 2 - lat_spd ** 2) * -1 if random.choice([True, False]) else 1
@@ -46,4 +48,4 @@ if __name__=='__main__':
         last_spd = newspd
         last_lat = new_lat
         last_lng = new_lng
-        data_utils.push_to_db(record_dict)
+        data_utils.push_to_userdata_db(record_dict)

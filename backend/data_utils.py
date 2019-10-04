@@ -14,7 +14,18 @@ def get_column(column_name):
     connection.close()
     return np.array(arr)
 
-def push_to_db(struct):
+def push_to_score_db(score):
+    try:
+        connection = sqlite3.connect("data/database.db")
+        connection.row_factory = sqlite3.Row 
+        insert_query = """INSERT INTO scores (id, time_calculated, score) VALUES (NULL, NULL, ?)"""
+        record_tuple = (score,)
+        cur.execute(insert_query, record_tuple)
+        connection.commit()
+        cur.close()
+        connection.close()
+
+def push_to_userdata_db(struct):
     try:
         connection = sqlite3.connect("data/database.db")
         connection.row_factory = sqlite3.Row
