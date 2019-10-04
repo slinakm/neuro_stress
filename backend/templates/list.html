@@ -8,6 +8,7 @@
             <td>Lat.</td>
             <td>Long.</td>
             <td>Speed</td>
+            <td>Phone On?</td>
             <td>Sentiment</td>
          </thead>
          
@@ -18,6 +19,7 @@
                <td> {{ row["loc_y"]}}</td>
                <td>{{row['loc_x']}}</td>	
                <td>{{row['speed']}}</td>	
+               <td>{{row['phone_on']}}</td>
                <td>{{row['feeling']}}</td>
             </tr>
          {% endfor %}

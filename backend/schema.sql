@@ -6,5 +6,7 @@ CREATE TABLE userdata (
     loc_x FLOAT,
     loc_y FLOAT,
     speed FLOAT,
+    phone_on INTEGER,
     feeling INTEGER
+
 )

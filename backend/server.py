@@ -23,7 +23,7 @@ def view_data():
 def regression():
     req_struct = request.get_json()
     data_utils.push_to_db(req_struct)
-    prediction = model_nn.predict(req_struct)
+    prediction = model_nn.predict(db.get_db())
     return str(req_struct["lat"])
 
 if __name__ == '__main__':
